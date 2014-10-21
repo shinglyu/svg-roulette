@@ -12,6 +12,11 @@ var x1,x2,y1,y2 = 0;
 var center = {'x':200, 'y':200}
 var diameter = 180;
 
+
+function getRandom(max){
+  var min = 0;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 function init(){
   paper = Raphael("holder");
   //CALCULATE THE TOTAL
@@ -26,14 +31,16 @@ function init(){
 
   }
   drawArcs();
+  drawPointer();
 
-  spin();
+  spin(getRandom(pieText.length)); 
 }               
 
-function spin(){
+function spin(id){
   var time = 3000; //ms
   var easing = '>'
-  var rotateAngle = 90 * 10;
+  var rotateAngle = 360 * 4;
+  rotateAngle += getAngleFromID(id, arcs.length);
   // spin arcs
   var roulette = paper.set(arcs)
   roulette.stop().animate({transform: "r" + rotateAngle + " " + center.x + " " + center.y}, time, easing); 
@@ -43,6 +50,11 @@ function spin(){
     var toAngle = fromAngle + rotateAngle
     text.stop().animate({transform: "r" + toAngle + " " + center.x + " " + center.y}, time, easing); 
   })
+}
+
+function getAngleFromID(arcId, arcsCount){
+  var arcAngle = 360/arcsCount;
+  return (360 + arcAngle * arcId - arcAngle/2);
 }
 
 function drawArcs(){
@@ -67,4 +79,10 @@ function drawArcs(){
     arcs.push(arc);
     texts.push(text);
   }
+}
+
+function drawPointer(){
+    var pcmd = "M" + center.x + "," + center.y + " m" + diameter + ",0" + " m-10,0 l40,-5 l0,10 z"; 
+    var p = paper.path(pcmd); 
+    p.attr("fill", "#F0F0F0");
 }
