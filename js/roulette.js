@@ -2,16 +2,28 @@ var paper;
 var arcs = []
 var texts= []
 var colorArr = ["#468966","#FFF0A5","#FFB03B","#B64926","#8E2800"];
-var pieData = [120,120,120];
+var arcsCount = 10;
+var pieData = [];
 var pieText= ["hello world","super cool","rotate! rotate!"];
-var sectorAngleArr = [];
-var total = 0;
+var sectorAngleArr = []; //remove in the future
 var startAngle = 0;
 var endAngle = 0;
 var x1,x2,y1,y2 = 0;
 var center = {'x':200, 'y':200}
 var diameter = 180;
 
+function getColor(i, total){
+  return colorArr[i % total % colorArr.length];
+}
+
+function getPieData(arcsCount){
+  var tmpPieData = []
+  for (var i = 0; i < arcsCount; ++i){
+    tmpPieData.push(360/arcsCount)
+  }
+  return tmpPieData
+  
+}
 
 function getRandom(max){
   var min = 0;
@@ -20,16 +32,9 @@ function getRandom(max){
 function init(){
   paper = Raphael("holder");
   //CALCULATE THE TOTAL
-  for(var k=0; k < pieData.length; k++){
-    total += pieData[k];
-
-  }
+  pieData = getPieData(arcsCount);
   //CALCULATE THE ANGLES THAT EACH SECTOR SWIPES AND STORE IN AN ARRAY
-  for(var i=0; i < pieData.length; i++){
-    var angle = Math.ceil(360 * pieData[i]/total);
-    sectorAngleArr.push(angle);
-
-  }
+  sectorAngleArr = pieData;
   drawArcs();
   drawPointer();
 
@@ -70,7 +75,7 @@ function drawArcs(){
 
     var d = "M" + center.x + "," + center.y + "L" + x1 + "," + y1 + " A" + diameter + "," + diameter + " 0 0,1 " + x2 + "," + y2 + " z"; //1 means clockwise
     arc = paper.path(d);
-    arc.attr("fill",colorArr[i]);
+    arc.attr("fill", getColor(i, arcsCount));
     // create text
     var text = paper.text(center.x + diameter/2, center.y, pieText[i]);
     text.attr({"font-size": "20px"});
