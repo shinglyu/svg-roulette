@@ -4,7 +4,17 @@ var texts= []
 var colorArr = ["#468966","#FFF0A5","#FFB03B","#B64926","#8E2800"];
 var arcsCount = 10;
 var pieData = [];
-var pieText= ["hello world","super cool","rotate! rotate!"];
+var pieText= [
+  "測試",
+  "貼紙",
+  "筆記本",
+  "Mozilla",
+  "Firefox",
+  "is supre",
+  "great",
+  "FirefoxOS",
+  "is fun"
+];
 var sectorAngleArr = []; //remove in the future
 var startAngle = 0;
 var endAngle = 0;
@@ -29,6 +39,11 @@ function getRandom(max){
   var min = 0;
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+function getRandomDriftDeg(arcAngle){
+  return Math.floor(0.9* (Math.random() * arcAngle - arcAngle/2)) ;
+  
+}
 function init(){
   paper = Raphael("holder");
   //CALCULATE THE TOTAL
@@ -46,6 +61,7 @@ function spin(id){
   var easing = '>'
   var rotateAngle = 360 * 4;
   rotateAngle += getAngleFromID(id, arcs.length);
+  rotateAngle += getRandomDriftDeg(pieData[0]);
   // spin arcs
   var roulette = paper.set(arcs)
   roulette.stop().animate({transform: "r" + rotateAngle + " " + center.x + " " + center.y}, time, easing); 
@@ -87,7 +103,8 @@ function drawArcs(){
 }
 
 function drawPointer(){
-    var pcmd = "M" + center.x + "," + center.y + " m" + diameter + ",0" + " m-10,0 l40,-5 l0,10 z"; 
+    var pcmd = "M" + center.x + "," + center.y + " m" + diameter + ",0" + " m-20,0 l40,-5 l0,10 z"; 
     var p = paper.path(pcmd); 
     p.attr("fill", "#F0F0F0");
 }
+//window.onkeydown = (function(evt){if (evt.keyCode === 32 || evt.keyCode === 13){ init();}});
