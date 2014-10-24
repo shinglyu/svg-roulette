@@ -2,19 +2,18 @@ var paper;
 var arcs = []
 var texts= []
 var colorArr = ["#468966","#FFF0A5","#FFB03B","#B64926","#8E2800"];
-var arcsCount = 10;
 var pieData = [];
 var pieText= [
-  "測試",
-  "貼紙",
+  "徽章套組",
   "筆記本",
-  "Mozilla",
-  "Firefox",
-  "is supre",
-  "great",
-  "FirefoxOS",
-  "is fun"
+  "各式貼紙",
+  "扇子",
+  "徽章套組",
+  "筆記本",
+  "各式貼紙",
+  "扇子",
 ];
+var arcsCount = pieText.length;
 var sectorAngleArr = []; //remove in the future
 var startAngle = 0;
 var endAngle = 0;
