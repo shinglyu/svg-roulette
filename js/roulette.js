@@ -57,9 +57,10 @@ function init(){
 }               
 
 function spin(id){
-  var time = 3000; //ms
-  var easing = '>'
-  var rotateAngle = 360 * 4;
+  var time = 8000; //ms
+  //var easing = '>'
+  var easing = 'cubic-bezier(0,1,0.1,1)' ;
+  var rotateAngle = 360 * 8; 
   rotateAngle += getAngleFromID(id, arcs.length);
   rotateAngle += getRandomDriftDeg(pieData[0]);
   // spin arcs
