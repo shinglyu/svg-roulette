@@ -22,7 +22,8 @@ var center = {'x':200, 'y':200}
 var diameter = 180;
 
 function getColor(i, total){
-  return colorArr[i % total % colorArr.length];
+  //return colorArr[i % total % colorArr.length];
+  return colorArr[i % 4];
 }
 
 function getPieData(arcsCount){
