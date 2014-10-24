@@ -1,17 +1,33 @@
 var paper;
 var arcs = []
 var texts= []
-var colorArr = ["#468966","#FFF0A5","#FFB03B","#B64926","#8E2800"];
+//var colorArr = ["#468966","#FFF0A5","#FFB03B","#B64926","#8E2800"];
+var colorArr = [
+  "#468966",
+  "#FFB03B",
+  "#B64926",
+  "#FFF0A5",
+  "#8F8F8F",
+  "#468966",
+  "#FFF0A5",
+  "#FFB03B",
+  "#FFF0A5",
+  "#FFB03B",
+  "#8F8F8F",
+];
 var pieData = [];
 var pieText= [
   "徽章套組",
-  "筆記本",
   "限量貼紙",
   "扇子",
+  "筆記本",
+  "再轉一次",
   "徽章套組",
   "筆記本",
   "限量貼紙",
-  "扇子",
+  "筆記本",
+  "限量貼紙",
+  "再轉一次",
 ];
 var arcsCount = pieText.length;
 var sectorAngleArr = []; //remove in the future
@@ -23,7 +39,7 @@ var diameter = 180;
 
 function getColor(i, total){
   //return colorArr[i % total % colorArr.length];
-  return colorArr[i % 4];
+  return colorArr[i];
 }
 
 function getPieData(arcsCount){
