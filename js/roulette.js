@@ -6,11 +6,11 @@ var pieData = [];
 var pieText= [
   "徽章套組",
   "筆記本",
-  "各式貼紙",
+  "限量貼紙",
   "扇子",
   "徽章套組",
   "筆記本",
-  "各式貼紙",
+  "限量貼紙",
   "扇子",
 ];
 var arcsCount = pieText.length;
