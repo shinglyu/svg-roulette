@@ -50,6 +50,7 @@ function init(){
   pieData = getPieData(arcsCount);
   //CALCULATE THE ANGLES THAT EACH SECTOR SWIPES AND STORE IN AN ARRAY
   sectorAngleArr = pieData;
+  drawRouletteShadow();
   drawArcs();
   drawPointer();
 
@@ -79,6 +80,14 @@ function getAngleFromID(arcId, arcsCount){
   return (360 + arcAngle * arcId - arcAngle/2);
 }
 
+function drawRouletteShadow(){
+    var offset = 5
+    var c = paper.circle(center.x, center.y, diameter);
+    c.attr("fill", "black");
+    c.glow({width:15, offsetx:2.5, offsety:2.5});
+  
+}
+
 function drawArcs(){
   for(var i=0; i <sectorAngleArr.length; i++){
     startAngle = endAngle;
@@ -104,8 +113,9 @@ function drawArcs(){
 }
 
 function drawPointer(){
-    var pcmd = "M" + center.x + "," + center.y + " m" + diameter + ",0" + " m-20,0 l40,-5 l0,10 z"; 
+    var pcmd = "M" + center.x + "," + center.y + " m" + diameter + ",0" + " m-20,0 l35,-5 l0,10 z"; 
     var p = paper.path(pcmd); 
     p.attr("fill", "#F0F0F0");
+    p.glow({width:5, offsetx:2.5, offsety:2.5});
 }
 //window.onkeydown = (function(evt){if (evt.keyCode === 32 || evt.keyCode === 13){ init();}});
