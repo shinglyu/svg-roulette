@@ -1,11 +1,12 @@
 var paper;
 var arcs = []
 var texts= []
-//var colorArr = ["#468966","#FFF0A5","#FFB03B","#B64926","#8E2800"];
+var colorArr = ["#468966","#FFF0A5","#FFB03B","#B64926","#8E2800"];
+/*
 var colorArr = [
   "#468966",
   "#FFB03B",
-  "#B64926",
+  //"#B64926",
   "#FFF0A5",
   "#8F8F8F",
   "#468966",
@@ -15,21 +16,9 @@ var colorArr = [
   "#FFB03B",
   "#8F8F8F",
 ];
+*/
 var pieData = [];
-var pieText= [
-  "徽章套組",
-  "限量貼紙",
-  "扇子",
-  "筆記本",
-  "再轉一次",
-  "徽章套組",
-  "筆記本",
-  "限量貼紙",
-  "筆記本",
-  "限量貼紙",
-  "再轉一次",
-];
-var arcsCount = pieText.length;
+var pieText= [];
 var sectorAngleArr = []; //remove in the future
 var startAngle = 0;
 var endAngle = 0;
@@ -38,8 +27,8 @@ var center = {'x':200, 'y':200}
 var diameter = 180;
 
 function getColor(i, total){
-  //return colorArr[i % total % colorArr.length];
-  return colorArr[i];
+  return colorArr[i % total % colorArr.length];
+  //return colorArr[i];
 }
 
 function getPieData(arcsCount){
@@ -63,7 +52,7 @@ function getRandomDriftDeg(arcAngle){
 function init(){
   paper = Raphael("holder");
   //CALCULATE THE TOTAL
-  pieData = getPieData(arcsCount);
+  pieData = getPieData(pieText.length);
   //CALCULATE THE ANGLES THAT EACH SECTOR SWIPES AND STORE IN AN ARRAY
   sectorAngleArr = pieData;
   drawRouletteShadow();
@@ -117,7 +106,7 @@ function drawArcs(){
 
     var d = "M" + center.x + "," + center.y + "L" + x1 + "," + y1 + " A" + diameter + "," + diameter + " 0 0,1 " + x2 + "," + y2 + " z"; //1 means clockwise
     arc = paper.path(d);
-    arc.attr("fill", getColor(i, arcsCount));
+    arc.attr("fill", getColor(i, pieText.length));
     // create text
     var text = paper.text(center.x + diameter/2, center.y, pieText[i]);
     text.attr({"font-size": "20px"});
@@ -133,5 +122,20 @@ function drawPointer(){
     var p = paper.path(pcmd); 
     p.attr("fill", "#F0F0F0");
     p.glow({width:5, offsetx:2.5, offsety:2.5});
+}
+
+function reset(){
+  paper.remove();
+  texts.forEach(function(text){
+    text.remove();
+  })
+  texts = []
+  arcs = []
+}
+
+document.getElementById('genBtn').onclick = function(){
+  pieText = document.getElementById('items').value.split("\n");
+  reset();
+  init();
 }
 //window.onkeydown = (function(evt){if (evt.keyCode === 32 || evt.keyCode === 13){ init();}});
