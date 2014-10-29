@@ -17,8 +17,14 @@ var colorArr = [
   "#8F8F8F",
 ];
 */
-var pieData = [];
-var pieText= [];
+var pieData = [ ];
+var pieText= [
+  'Firefox',
+  'Thunderbird',
+  'Sea Monkey',
+  'Persona',
+  'Bugzilla',
+];
 var sectorAngleArr = []; //remove in the future
 var startAngle = 0;
 var endAngle = 0;
@@ -139,3 +145,5 @@ document.getElementById('genBtn').onclick = function(){
   init();
 }
 //window.onkeydown = (function(evt){if (evt.keyCode === 32 || evt.keyCode === 13){ init();}});
+document.getElementById('items').value = pieText.join('\n')
+
