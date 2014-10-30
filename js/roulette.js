@@ -2,6 +2,9 @@ var paper;
 var arcs = []
 var texts= []
 var colorArr = ["#468966","#FFF0A5","#FFB03B","#B64926","#8E2800"];
+var colorArr = [
+  "hsl(100%, 100%, 50%)",
+  "#FFF0A5","#FFB03B","#B64926","#8E2800"];
 /*
 var colorArr = [
   "#468966",
@@ -33,7 +36,9 @@ var center = {'x':200, 'y':200}
 var diameter = 180;
 
 function getColor(i, total){
-  return colorArr[i % total % colorArr.length];
+  var h = i/total
+  return "hsl(" + h + ", .7, 0.5)"
+  //return colorArr[i % total % colorArr.length];
   //return colorArr[i];
 }
 
@@ -141,6 +146,9 @@ function reset(){
 
 function parseList(){
   var list = document.getElementById('items').value.split("\n");
+  while (list.indexOf("") > 0){
+    list.splice(list.indexOf(""),1)
+  }
   while (list.length < 8){
     list = list.concat(list)
   }
