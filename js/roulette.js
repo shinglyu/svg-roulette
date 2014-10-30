@@ -44,14 +44,14 @@ function getRandomDriftDeg(arcAngle){
 function init(){
   paper = Raphael("holder");
   //CALCULATE THE TOTAL
-  pieData = getPieData(pieText.length);
+  pieData = getPieData(multiplyList(pieText).length);
   //CALCULATE THE ANGLES THAT EACH SECTOR SWIPES AND STORE IN AN ARRAY
   sectorAngleArr = pieData;
   drawRouletteShadow();
   drawArcs();
   drawPointer();
 
-  spin(getRandom(pieText.length)); 
+  spin(getRandom(multiplyList(pieText).length)); 
 }               
 
 function spin(id){
@@ -98,9 +98,9 @@ function drawArcs(){
 
     var d = "M" + center.x + "," + center.y + "L" + x1 + "," + y1 + " A" + diameter + "," + diameter + " 0 0,1 " + x2 + "," + y2 + " z"; //1 means clockwise
     arc = paper.path(d);
-    arc.attr("fill", getColor(i, pieText.length));
+    arc.attr("fill", getColor(i, multiplyList(pieText).length));
     // create text
-    var text = paper.text(center.x + diameter/2, center.y, pieText[i]);
+    var text = paper.text(center.x + diameter/2, center.y, multiplyList(pieText)[i]);
     text.attr({"font-size": "20px"});
     text.transform('r'+(startAngle+endAngle)/2 + ' ' + center.x + ' ' + center.y)
     //alert(d);
@@ -127,6 +127,11 @@ function reset(){
 
 function parseList(){
   var list = document.getElementById('items').value.split("\n");
+  return list
+}
+
+function multiplyList(rawList){
+  var list = rawList
   while (list.indexOf("") > 0){
     list.splice(list.indexOf(""),1)
   }
