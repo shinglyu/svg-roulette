@@ -139,11 +139,25 @@ function reset(){
   arcs = []
 }
 
+function parseList(){
+  var list = document.getElementById('items').value.split("\n");
+  while (list.length < 8){
+    list = list.concat(list)
+  }
+  return list 
+}
+
 document.getElementById('genBtn').onclick = function(){
-  pieText = document.getElementById('items').value.split("\n");
+  pieText = parseList()
   reset();
   init();
 }
 //window.onkeydown = (function(evt){if (evt.keyCode === 32 || evt.keyCode === 13){ init();}});
 document.getElementById('items').value = pieText.join('\n')
+
+document.body.onload = function(){
+  document.getElementById('items').value = pieText.join('\n')
+  pieText = parseList()
+  init()
+}
 
