@@ -1,25 +1,6 @@
 var paper;
 var arcs = []
 var texts= []
-var colorArr = ["#468966","#FFF0A5","#FFB03B","#B64926","#8E2800"];
-var colorArr = [
-  "hsl(100%, 100%, 50%)",
-  "#FFF0A5","#FFB03B","#B64926","#8E2800"];
-/*
-var colorArr = [
-  "#468966",
-  "#FFB03B",
-  //"#B64926",
-  "#FFF0A5",
-  "#8F8F8F",
-  "#468966",
-  "#FFF0A5",
-  "#FFB03B",
-  "#FFF0A5",
-  "#FFB03B",
-  "#8F8F8F",
-];
-*/
 var pieData = [ ];
 var pieText= [
   'Firefox',
@@ -155,8 +136,22 @@ function parseList(){
   return list 
 }
 
+function updateUrl(){
+  var url = window.location.href;
+  var baseUrl = url.split('?')[0]
+  window.location.href = baseUrl + "?items=" + pieText.join(',')
+}
+
+function getQueryStringByName(name){
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+  results = regex.exec(location.search);
+  return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 document.getElementById('genBtn').onclick = function(){
-  pieText = parseList()
+  pieText = parseList();
+  updateUrl();
   reset();
   init();
 }
@@ -164,6 +159,10 @@ document.getElementById('genBtn').onclick = function(){
 document.getElementById('items').value = pieText.join('\n')
 
 document.body.onload = function(){
+  var query = getQueryStringByName('items')
+  if (query != ""){
+    pieText = query.split(',')
+  }
   document.getElementById('items').value = pieText.join('\n')
   pieText = parseList()
   init()
