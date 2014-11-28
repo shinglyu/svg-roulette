@@ -9,6 +9,7 @@ var pieText= [
   'Persona',
   'Bugzilla',
 ];
+var winnerId;
 var sectorAngleArr = []; //remove in the future
 var startAngle = 0;
 var endAngle = 0;
@@ -51,7 +52,8 @@ function init(){
   drawArcs();
   drawPointer();
 
-  spin(getRandom(multiplyList(pieText).length)); 
+  winnerId = getRandom(multiplyList(pieText).length);
+  spin(winnerId); 
 }               
 
 function spin(id){
@@ -159,6 +161,14 @@ document.getElementById('genBtn').onclick = function(){
   updateUrl();
   reset();
   init();
+}
+
+document.getElementById('rmBtn').onclick = function(){
+  //pieText = parseList();
+  pieText.splice(winnerId % pieText.length, 1);
+  updateUrl();
+  //reset();
+  //init();
 }
 //window.onkeydown = (function(evt){if (evt.keyCode === 32 || evt.keyCode === 13){ init();}});
 document.getElementById('items').value = pieText.join('\n')

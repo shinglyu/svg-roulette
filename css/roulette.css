@@ -10,3 +10,7 @@ body {
 p{
   color:lightgrey;
 }
+
+button {
+  height: 4em;
+}
