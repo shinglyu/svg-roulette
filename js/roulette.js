@@ -35,7 +35,7 @@ function getPieData(arcsCount){
 
 function getRandom(max){
   var min = 0;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function getRandomDriftDeg(arcAngle){
@@ -60,8 +60,9 @@ function spin(id){
   var time = 8000; //ms
   //var easing = '>'
   var easing = 'cubic-bezier(0,1,0.1,1)' ;
-  var rotateAngle = 360 * 8; 
-  rotateAngle += getAngleFromID(id, arcs.length);
+  var rotateAngle = 360 * 9; 
+  //var rotateAngle = 360 * 1; 
+  rotateAngle -= getAngleFromID(id, arcs.length);
   rotateAngle += getRandomDriftDeg(pieData[0]);
   // spin arcs
   var roulette = paper.set(arcs)
@@ -76,7 +77,7 @@ function spin(id){
 
 function getAngleFromID(arcId, arcsCount){
   var arcAngle = 360/arcsCount;
-  return (360 + arcAngle * arcId - arcAngle/2);
+  return (arcAngle * arcId + arcAngle/2);
 }
 
 function drawRouletteShadow(){
