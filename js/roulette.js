@@ -1,6 +1,6 @@
 var paper;
-var arcs = []
-var texts= []
+var arcs = []; //svg object
+var texts= []; //svg object
 var pieText= [
   'Firefox',
   'Thunderbird',
@@ -8,36 +8,8 @@ var pieText= [
   'Persona',
   'Bugzilla',
 ];
-var center = {'x':200, 'y':200}
+var center = {'x':200, 'y':200};
 var diameter = 180;
-
-function getColor(i, total){
-  var h = i/total
-  return "hsl(" + h + ", .7, 0.5)"
-  //return colorArr[i % total % colorArr.length];
-  //return colorArr[i];
-}
-
-//FIXME: Eliminate this
-function getPieData(arcsCount){
-  var tmpPieData = []
-  for (var i = 0; i < arcsCount; ++i){
-    tmpPieData.push(360/arcsCount)
-  }
-  return tmpPieData
-  
-}
-
-function multiplyList(rawList){
-  var list = rawList
-  while (list.indexOf("") > 0){
-    list.splice(list.indexOf(""),1)
-  }
-  while (list.length < 8){
-    list = list.concat(list)
-  }
-  return list 
-}
 
 //max not included, 0 to max-1
 function getRandom(max){
@@ -47,41 +19,61 @@ function getRandom(max){
   return Math.floor(m.random() * (max - min + 1)) + min;
 }
 
+function multiplyList(rawList){
+  var list = rawList;
+  // Strip empty entries
+  while (list.indexOf("") > 0){
+    list.splice(list.indexOf(""),1);
+  }
+  // Repeat items until it has more than 8 items
+  while (list.length < 8){
+    list = list.concat(list);
+  }
+  return list ;
+}
+
+function getAngleFromID(arcId, arcsCount){ // Do we need arcsCount?
+  var arcAngle = 360/arcsCount;
+  return (arcAngle * arcId + arcAngle/2);
+}
+
 function getRandomDriftDeg(multipliedItems){
-  var arcAngle = 360/multipliedItems.length
+  var arcAngle = 360/multipliedItems.length;
   return Math.floor(0.9* (Math.random() * arcAngle - arcAngle/2)) ;
 }
 
-function spin(id){
+function spinToId(id){
   //TODO: Move these config to the top
   var time = 8000; //ms
   //var easing = '>'
   var easing = 'cubic-bezier(0,1,0.1,1)' ;
   var rotateAngle = 360 * 9; 
   //var rotateAngle = 360 * 1; 
-  rotateAngle -= getAngleFromID(id, arcs.length);
+  rotateAngle -= getAngleFromID(id, multiplyList(pieText).length);
   rotateAngle += getRandomDriftDeg(multiplyList(pieText));
-  // spin arcs
-  var roulette = paper.set(arcs)
-  roulette.stop().animate({transform: "r" + rotateAngle + " " + center.x + " " + center.y}, time, easing); 
-  // spin texts 
+  // spinToId texts 
   texts.forEach(function(text){
-    var fromAngle = parseInt(text.transform()[0][1])
-    var toAngle = fromAngle + rotateAngle
+    var fromAngle = parseInt(text.transform()[0][1]);
+    var toAngle = fromAngle + rotateAngle;
     text.stop().animate({transform: "r" + toAngle + " " + center.x + " " + center.y}, time, easing); 
-  })
+  });
+  // spinToId arcs
+  var roulette = paper.set(arcs);
+  roulette.stop().animate({transform: "r" + rotateAngle + " " + center.x + " " + center.y}, time, easing); 
 }
 
-function getAngleFromID(arcId, arcsCount){
-  if (arcId > arcsCount) {
-    console.error("arcId overflow")
-  }
-  var arcAngle = 360/arcsCount;
-  return (arcAngle * arcId + arcAngle/2);
+
+function getColor(i, total){
+  var h = i/total;
+  return "hsl(" + h + ", .7, 0.5)";
+  //return colorArr[i % total % colorArr.length];
+  //return colorArr[i];
 }
+
 
 function drawRouletteShadow(){
-    var offset = 5
+    var offset = 5;
+    console.log(paper)
     var c = paper.circle(center.x, center.y, diameter);
     c.attr("fill", "black");
     c.glow({width:15, offsetx:2.5, offsety:2.5});
@@ -89,7 +81,7 @@ function drawRouletteShadow(){
 }
 
 function drawArcs(){
-  var startAngle, endAngle = 0
+  var startAngle, endAngle = 0;
   var x1,x2,y1,y2 = 0;
   for(var i=0; i <multiplyList(pieText).length; i++){
     startAngle = endAngle;
@@ -107,7 +99,7 @@ function drawArcs(){
     // create text
     var text = paper.text(center.x + diameter/2, center.y, multiplyList(pieText)[i]);
     text.attr({"font-size": "20px"});
-    text.transform('r'+(startAngle+endAngle)/2 + ' ' + center.x + ' ' + center.y)
+    text.transform('r'+(startAngle+endAngle)/2 + ' ' + center.x + ' ' + center.y);
     //alert(d);
     arcs.push(arc);
     texts.push(text);
@@ -125,23 +117,26 @@ function reset(){
   paper.remove();
   texts.forEach(function(text){
     text.remove();
-  })
-  texts = []
-  arcs = []
+  });
+  texts = [];
+  arcs = [];
 }
 
 function parseList(){
   var list = document.getElementById('items').value.split("\n");
-  return list
+  return list;
 }
 
 
 //url related
+/*
+//This will cause a refresh
 function updateUrl(){
   var url = window.location.href;
-  var baseUrl = url.split('?')[0]
-  window.location.href = baseUrl + "?items=" + pieText.join(',')
+  var baseUrl = url.split('?')[0];
+  window.location.href = baseUrl + "?items=" + pieText.join(',');
 }
+*/
 
 function getQueryStringByName(name){
   name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -151,39 +146,65 @@ function getQueryStringByName(name){
 }
 
 function init(){
-  paper = Raphael("holder");
+  paper = Raphael("holder"); //Don't know why this have to be here
+  // Order decides the z-index
   drawRouletteShadow();
   drawArcs();
   drawPointer();
-
-  winnerId = getRandom(multiplyList(pieText).length - 1 ); //for 5 arcs, the id is 0 to 4
-  spin(winnerId); 
 }               
 
-document.getElementById('genBtn').onclick = function(){
-  pieText = parseList();
-  updateUrl();
-  reset();
-  init();
+function randomSpin(){
+  winnerId = getRandom(multiplyList(pieText).length - 1); //for 5 arcs, the id is 0 to 4
+  spinToId(winnerId); 
 }
 
-document.getElementById('rmBtn').onclick = function(){
+function refreshUi(){
+//Call this to reflect pieText change
   //pieText = parseList();
-  pieText.splice(winnerId % pieText.length, 1);
-  updateUrl();
-  //reset();
-  //init();
+  document.getElementById('items').value = pieText.join("\n");
+  document.getElementById('bookmarklink').href = "./roulette.html?items=" + pieText.join(',');
+
+  if (typeof winnerId === "undefined") {
+    document.getElementById('rmBtn').disabled = true;
+  } else {
+    document.getElementById('rmBtn').disabled = false;
+  }
 }
-//window.onkeydown = (function(evt){if (evt.keyCode === 32 || evt.keyCode === 13){ init();}});
-document.getElementById('items').value = pieText.join('\n')
+
+function removeWinner(){
+  if (pieText.length <= 1) {return;}
+  pieText.splice(winnerId % pieText.length, 1);
+  document.getElementById('items').value = pieText.join("\n");
+}
 
 document.body.onload = function(){
-  var query = getQueryStringByName('items')
-  if (query != ""){
-    pieText = query.split(',')
+  var query = getQueryStringByName('items');
+  if (query !== ""){
+    pieText = query.split(',');
   }
-  document.getElementById('items').value = pieText.join('\n')
-  pieText = parseList()
-  init()
-}
+  //pieText = parseList();
+  refreshUi();
+  init();
 
+
+  document.getElementById('genBtn').onclick = function(){
+    //updateUrl();
+    reset();
+    init();
+    randomSpin();
+    refreshUi();
+  };
+
+  document.getElementById('rmBtn').onclick = function(){
+    //pieText = parseList();
+    removeWinner();
+    //updateUrl();
+    reset();
+    init();
+    randomSpin();
+    refreshUi();
+  };
+
+  //window.onkeydown = (function(evt){if (evt.keyCode === 32 || evt.keyCode === 13){ init();}});
+  //
+};
