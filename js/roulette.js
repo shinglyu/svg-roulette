@@ -10,11 +10,11 @@ var pieText= [
 ];
 var center = {'x':200, 'y':200};
 var diameter = 180;
+var m = new MersenneTwister(); //move to global to fix the seed
 
 //max not included, 0 to max-1
 function getRandom(max){
   var min = 0;
-  var m = new MersenneTwister();
   //return Math.floor(Math.random() * (max - min + 1)) + min;
   return Math.floor(m.random() * (max - min + 1)) + min;
 }
@@ -73,7 +73,6 @@ function getColor(i, total){
 
 function drawRouletteShadow(){
     var offset = 5;
-    console.log(paper)
     var c = paper.circle(center.x, center.y, diameter);
     c.attr("fill", "black");
     c.glow({width:15, offsetx:2.5, offsety:2.5});
