@@ -33,9 +33,12 @@ function getPieData(arcsCount){
   
 }
 
+//max not included, 0 to max-1
 function getRandom(max){
   var min = 0;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  var m = new MersenneTwister();
+  //return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(m.random() * (max - min + 1)) + min;
 }
 
 function getRandomDriftDeg(arcAngle){
@@ -52,7 +55,7 @@ function init(){
   drawArcs();
   drawPointer();
 
-  winnerId = getRandom(multiplyList(pieText).length);
+  winnerId = getRandom(multiplyList(pieText).length - 1 ); //for 5 arcs, the id is 0 to 4
   spin(winnerId); 
 }               
 
@@ -76,6 +79,10 @@ function spin(id){
 }
 
 function getAngleFromID(arcId, arcsCount){
+  console.log(arcId + " / " + arcsCount)
+  if (arcId > arcsCount) {
+    console.error("arcId overflow")
+  }
   var arcAngle = 360/arcsCount;
   return (arcAngle * arcId + arcAngle/2);
 }
