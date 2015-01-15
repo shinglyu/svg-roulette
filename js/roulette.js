@@ -1,7 +1,6 @@
 var paper;
 var arcs = []
 var texts= []
-var pieData = [ ];
 var pieText= [
   'Firefox',
   'Thunderbird',
@@ -9,11 +8,6 @@ var pieText= [
   'Persona',
   'Bugzilla',
 ];
-var winnerId;
-var sectorAngleArr = []; //remove in the future
-var startAngle = 0;
-var endAngle = 0;
-var x1,x2,y1,y2 = 0;
 var center = {'x':200, 'y':200}
 var diameter = 180;
 
@@ -24,6 +18,7 @@ function getColor(i, total){
   //return colorArr[i];
 }
 
+//FIXME: Eliminate this
 function getPieData(arcsCount){
   var tmpPieData = []
   for (var i = 0; i < arcsCount; ++i){
@@ -31,6 +26,17 @@ function getPieData(arcsCount){
   }
   return tmpPieData
   
+}
+
+function multiplyList(rawList){
+  var list = rawList
+  while (list.indexOf("") > 0){
+    list.splice(list.indexOf(""),1)
+  }
+  while (list.length < 8){
+    list = list.concat(list)
+  }
+  return list 
 }
 
 //max not included, 0 to max-1
@@ -41,32 +47,20 @@ function getRandom(max){
   return Math.floor(m.random() * (max - min + 1)) + min;
 }
 
-function getRandomDriftDeg(arcAngle){
+function getRandomDriftDeg(multipliedItems){
+  var arcAngle = 360/multipliedItems.length
   return Math.floor(0.9* (Math.random() * arcAngle - arcAngle/2)) ;
-  
 }
-function init(){
-  paper = Raphael("holder");
-  //CALCULATE THE TOTAL
-  pieData = getPieData(multiplyList(pieText).length);
-  //CALCULATE THE ANGLES THAT EACH SECTOR SWIPES AND STORE IN AN ARRAY
-  sectorAngleArr = pieData;
-  drawRouletteShadow();
-  drawArcs();
-  drawPointer();
-
-  winnerId = getRandom(multiplyList(pieText).length - 1 ); //for 5 arcs, the id is 0 to 4
-  spin(winnerId); 
-}               
 
 function spin(id){
+  //TODO: Move these config to the top
   var time = 8000; //ms
   //var easing = '>'
   var easing = 'cubic-bezier(0,1,0.1,1)' ;
   var rotateAngle = 360 * 9; 
   //var rotateAngle = 360 * 1; 
   rotateAngle -= getAngleFromID(id, arcs.length);
-  rotateAngle += getRandomDriftDeg(pieData[0]);
+  rotateAngle += getRandomDriftDeg(multiplyList(pieText));
   // spin arcs
   var roulette = paper.set(arcs)
   roulette.stop().animate({transform: "r" + rotateAngle + " " + center.x + " " + center.y}, time, easing); 
@@ -79,7 +73,6 @@ function spin(id){
 }
 
 function getAngleFromID(arcId, arcsCount){
-  console.log(arcId + " / " + arcsCount)
   if (arcId > arcsCount) {
     console.error("arcId overflow")
   }
@@ -96,9 +89,11 @@ function drawRouletteShadow(){
 }
 
 function drawArcs(){
-  for(var i=0; i <sectorAngleArr.length; i++){
+  var startAngle, endAngle = 0
+  var x1,x2,y1,y2 = 0;
+  for(var i=0; i <multiplyList(pieText).length; i++){
     startAngle = endAngle;
-    endAngle = startAngle + sectorAngleArr[i];
+    endAngle = startAngle + 360/multiplyList(pieText).length;
 
     x1 = parseInt(center.x+ diameter*Math.cos(Math.PI*startAngle/180));
     y1 = parseInt(center.y+ diameter*Math.sin(Math.PI*startAngle/180));
@@ -140,17 +135,8 @@ function parseList(){
   return list
 }
 
-function multiplyList(rawList){
-  var list = rawList
-  while (list.indexOf("") > 0){
-    list.splice(list.indexOf(""),1)
-  }
-  while (list.length < 8){
-    list = list.concat(list)
-  }
-  return list 
-}
 
+//url related
 function updateUrl(){
   var url = window.location.href;
   var baseUrl = url.split('?')[0]
@@ -163,6 +149,16 @@ function getQueryStringByName(name){
   results = regex.exec(location.search);
   return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
+
+function init(){
+  paper = Raphael("holder");
+  drawRouletteShadow();
+  drawArcs();
+  drawPointer();
+
+  winnerId = getRandom(multiplyList(pieText).length - 1 ); //for 5 arcs, the id is 0 to 4
+  spin(winnerId); 
+}               
 
 document.getElementById('genBtn').onclick = function(){
   pieText = parseList();
