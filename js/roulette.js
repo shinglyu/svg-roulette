@@ -81,6 +81,7 @@ function drawRouletteShadow(){
 }
 
 function drawArcs(){
+  //TODO: cleanup this two duplicated for
   var startAngle, endAngle = 0;
   var x1,x2,y1,y2 = 0;
   for(var i=0; i <multiplyList(pieText).length; i++){
@@ -96,12 +97,16 @@ function drawArcs(){
     var d = "M" + center.x + "," + center.y + "L" + x1 + "," + y1 + " A" + diameter + "," + diameter + " 0 0,1 " + x2 + "," + y2 + " z"; //1 means clockwise
     arc = paper.path(d);
     arc.attr("fill", getColor(i, multiplyList(pieText).length));
-    // create text
+    arcs.push(arc);
+  }
+  //draw text on top of arcs
+  for(var i=0; i <multiplyList(pieText).length; i++){
+    startAngle = endAngle;
+    endAngle = startAngle + 360/multiplyList(pieText).length;
     var text = paper.text(center.x + diameter/2, center.y, multiplyList(pieText)[i]);
     text.attr({"font-size": "20px"});
     text.transform('r'+(startAngle+endAngle)/2 + ' ' + center.x + ' ' + center.y);
     //alert(d);
-    arcs.push(arc);
     texts.push(text);
   }
 }
