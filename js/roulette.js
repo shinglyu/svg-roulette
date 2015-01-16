@@ -47,7 +47,7 @@ function spinToId(id){
   var time = 8000; //ms
   //var easing = '>'
   var easing = 'cubic-bezier(0,1,0.1,1)' ;
-  var rotateAngle = 360 * 9; 
+  var rotateAngle = 360 * 4; 
   //var rotateAngle = 360 * 1; 
   rotateAngle -= getAngleFromID(id, multiplyList(pieText).length);
   rotateAngle += getRandomDriftDeg(multiplyList(pieText));
@@ -181,6 +181,10 @@ function removeWinner(){
   document.getElementById('items').value = pieText.join("\n");
 }
 
+function readNewItemsFromTextarea() {
+  pieText = document.getElementById('items').value.split("\n")
+}
+
 document.body.onload = function(){
   var query = getQueryStringByName('items');
   if (query !== ""){
@@ -194,6 +198,7 @@ document.body.onload = function(){
   document.getElementById('genBtn').onclick = function(){
     //updateUrl();
     reset();
+    readNewItemsFromTextarea();
     init();
     randomSpin();
     refreshUi();
@@ -202,12 +207,17 @@ document.body.onload = function(){
   document.getElementById('rmBtn').onclick = function(){
     //pieText = parseList();
     removeWinner();
+    //readNewItemsFromTextarea();
     //updateUrl();
     reset();
     init();
     randomSpin();
     refreshUi();
   };
+
+  document.getElementById('items').oninput= function(){
+    document.getElementById('rmBtn').disabled = true;
+  }
 
   //window.onkeydown = (function(evt){if (evt.keyCode === 32 || evt.keyCode === 13){ init();}});
   //
