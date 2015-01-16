@@ -47,7 +47,7 @@ function spinToId(id){
   var time = 8000; //ms
   //var easing = '>'
   var easing = 'cubic-bezier(0,1,0.1,1)' ;
-  var rotateAngle = 360 * 4; 
+  var rotateAngle = 360 * 6; 
   //var rotateAngle = 360 * 1; 
   rotateAngle -= getAngleFromID(id, multiplyList(pieText).length);
   rotateAngle += getRandomDriftDeg(multiplyList(pieText));
