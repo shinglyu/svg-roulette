@@ -1,0 +1,14 @@
+{
+    "name": "Roulette",
+      "description": "A customizable roulette for lucky draw",
+        "launch_path": "/roulette.html",
+        "icons": {
+            "512": "/img/icon-512.png",
+            "128": "/img/icon-128.png"
+        },
+        "developer": {
+            "name": "Shing Lyu",
+            "url": "https://shinglyu.github.io/"
+        },
+          "default_locale": "en"
+}
